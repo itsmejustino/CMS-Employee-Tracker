@@ -2,14 +2,12 @@ const connection = require("./config/connection");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
-connection.connect(
-  (error) => {
-    if (error) throw error;
-    startingMenu();
-  }
-)
+connection.connect((error) => {
+  if (error) throw error;
+  startingMenu();
+});
 //initialize the application.
-function startingMenu(){
+function startingMenu() {
   inquirer
     .prompt([
       {
@@ -18,42 +16,34 @@ function startingMenu(){
         message: "Please choose an option.",
         choices: [
           {
-            
             name: "View all departments",
             value: "viewDepartments",
           },
           {
-           
             name: "View all employees",
             value: "viewEmployees",
           },
           {
-          
             name: "View all roles",
             value: "viewRoles",
           },
           {
-            
             name: "Add a department",
             value: "createDepartment",
           },
           {
-            
             name: "Add a role",
             value: "createRole",
           },
           {
-           
             name: "Add an employee",
             value: "createEmployee",
           },
           {
-           
             name: "Update employee role",
             value: "updateEmployee",
           },
           {
-            
             name: "Exit",
             value: "exit",
           },
@@ -81,14 +71,14 @@ function startingMenu(){
         addRole();
       }
       if (options == "updateEmployee") {
-        editRole();
+        editEmployee();
       }
       if (options == "exit") {
-        console.log('exiting program');
+        console.log("exiting program");
         process.exit();
       }
     });
-};
+}
 
 const getDepartments = async () => {
   const response = await inquirer.prompt([
@@ -97,95 +87,94 @@ const getDepartments = async () => {
       name: "viewingDepartments",
     },
   ]);
-  const sql = "SELECT * FROM employee_tracker";
+  const sql = "SELECT * FROM department";
   connection.query(sql, response.viewingDepartments, (err, result) => {
+    if (err) throw err;
+    console.table(result);
+    startingMenu();
+  });
+};
+
+const getEmployees = async () => {
+  const response = await inquirer.prompt([
+    {
+      message: "Viewing all employees.",
+      name: "viewingEmployees",
+    },
+  ]);
+  const sql = "SELECT * FROM employee";
+  connection.query(sql, response.viewingEmployees, (err, result) => {
     if (err) console.error(err);
     console.log(result);
   });
-  startingMenu();
 };
 
+const getRoles = async () => {
+  const response = await inquirer.prompt([
+    {
+      message: "Viewing all roles.",
+      name: "viewingRoles",
+    },
+  ]);
+  const sql = "SELECT * FROM current_role";
+  connection.query(sql, response.viewingRoles, (err, result) => {
+    if (err) console.error(err);
+    console.log(result);
+  });
+};
 
-// const getEmployees = async () => {
-//   const response = await inquirer.prompt([
-//     {
-//       message: "Viewing all employees.",
-//       name: "viewingEmployees",
-//     },
-//   ]);
-//   const sql = "INSERT INTO employees (name) VALUES (?)";
-//   db.query(sql, response.viewingEmployees, (err, result) => {
-//     if (err) console.error(err);
-//     console.log(result);
-//   });
-// };
+const addDepartment = async () => {
+  const response = await inquirer.prompt([
+    {
+      message: "What is the name of your department?",
+      name: "createdDepartment",
+    },
+  ]);
+  const sql = "INSERT INTO departments (name) VALUES (?)";
+  connection.query(sql, response.createdDepartment, (err, result) => {
+    if (err) console.error(err);
+    console.log(result);
+  });
+};
 
-// const getRoles = async () => {
-//   const response = await inquirer.prompt([
-//     {
-//       message: "Viewing all roles.",
-//       name: "viewingRoles",
-//     },
-//   ]);
-//   const sql = "INSERT INTO departments (name) VALUES (?)";
-//   db.query(sql, response.viewingRoles, (err, result) => {
-//     if (err) console.error(err);
-//     console.log(result);
-//   });
-// };
+const addRole = async () => {
+  const response = await inquirer.prompt([
+    {
+      message: "What is the name of role you would like to create??",
+      name: "createdRole",
+    },
+  ]);
+  const sql = "INSERT INTO role (name) VALUES (?)";
+  connection.query(sql, response.createdRole, (err, result) => {
+    if (err) console.error(err);
+    console.log(result);
+  });
+};
 
-// const addDepartment = async () => {
-//   const response = await inquirer.prompt([
-//     {
-//       message: "What is the name of your department?",
-//       name: "createdDepartment",
-//     },
-//   ]);
-//   const sql = "INSERT INTO departments (name) VALUES (?)";
-//   db.query(sql, response.createdDepartment, (err, result) => {
-//     if (err) console.error(err);
-//     console.log(result);
-//   });
-// };
+const addEmployee = async () => {
+  const response = await inquirer.prompt([
+    {
+      message: "What is the name of role you would like to create??",
+      name: "createdEmployee",
+    },
+  ]);
+  const sql = "INSERT INTO role (name) VALUES (?)";
+  connection.query(sql, response.createdEmployee, (err, result) => {
+    if (err) console.error(err);
+    console.log(result);
+  });
+};
 
-// const addRole = async () => {
-//   const response = await inquirer.prompt([
-//     {
-//       message: "What is the name of role you would like to create??",
-//       name: "createdRole",
-//     },
-//   ]);
-//   const sql = "INSERT INTO role (name) VALUES (?)";
-//   db.query(sql, response.createdRole, (err, result) => {
-//     if (err) console.error(err);
-//     console.log(result);
-//   });
-// };
-
-// const addEmployee = async () => {
-//   const response = await inquirer.prompt([
-//     {
-//       message: "What is the name of role you would like to create??",
-//       name: "createdEmployee",
-//     },
-//   ]);
-//   const sql = "INSERT INTO role (name) VALUES (?)";
-//   db.query(sql, response.createdEmployee, (err, result) => {
-//     if (err) console.error(err);
-//     console.log(result);
-//   });
-// };
-
-// const editEmployee = async () => {
-//   const response = await inquirer.prompt([
-//     {
-//       message: "What is the name of role you would like to create??",
-//       name: "updatedEmployee",
-//     },
-//   ]);
-//   const sql = "INSERT INTO role (name) VALUES (?)";
-//   db.query(sql, response.updatedEmployee, (err, result) => {
-//     if (err) console.error(err);
-//     console.log(result);
-//   });
-// };
+const editEmployee = async () => {
+  const response = await inquirer.prompt([
+    {
+      message: "What is the name of role you would like to create??",
+      name: "updatedEmployee",
+    },
+  ]);
+  const sql = "INSERT INTO role (name) VALUES (?)";
+  connection.query(sql, response.updatedEmployee, (err, result) => {
+    if (err) console.error(err);
+    console.log(result);
+  });
+};
