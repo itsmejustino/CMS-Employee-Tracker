@@ -97,14 +97,13 @@ const getDepartments = async () => {
       name: "viewingDepartments",
     },
   ]);
-  const sql = "SELECT * FROM departments";
+  const sql = "SELECT * FROM employee_tracker";
   connection.query(sql, response.viewingDepartments, (err, result) => {
     if (err) console.error(err);
     console.log(result);
   });
   startingMenu();
 };
-
 
 
 // const getEmployees = async () => {
