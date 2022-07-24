@@ -86,12 +86,12 @@ const getDepartments = async () => {
       message: "Viewing all departments",
       name: "viewingDepartments",
     },
-    
+
   ]).then(console.log("(Press [ENTER] to view table)"));
-  
+
   const sql = "SELECT * FROM department";
   connection.query(sql, response.viewingDepartments, (err, result) => {
-    if (err) throw error;
+    if (err) throw err;
     console.table(result);
     startingMenu();
   });
@@ -103,12 +103,12 @@ const getEmployees = async () => {
       message: "Viewing all employees.",
       name: "viewingEmployees",
     },
-   
+
   ]).then(console.log("(Press [ENTER] to view table)"));
   console.log("(Press [ENTER] to view table)")
   const sql = "SELECT * FROM employee";
   connection.query(sql, response.viewingEmployees, (err, result) => {
-    if (err) throw error;
+    if (err) throw err;
     console.table(result);
     startingMenu();
   });
@@ -120,44 +120,82 @@ const getRoles = async () => {
       message: "Viewing all roles.",
       name: "viewingRoles",
     },
-   
-  ]);
-  console.log("(Press [ENTER] to view table)")
+
+  ]).then(console.log("(Press [ENTER] to view table)"));
   const sql = "SELECT * FROM role";
   connection.query(sql, response.viewingRoles, (err, result) => {
-    if (err) throw error;
+    if (err) throw err;
     console.table(result);
     startingMenu();
-    
-    
+
+
   });
 };
 
 const addDepartment = async () => {
   const response = await inquirer.prompt([
     {
+      type: "input",
       message: "What is the name of your department?",
       name: "createdDepartment",
     },
+
   ]);
-  const sql = "INSERT INTO departments (name) VALUES (?)";
+  const sql = "INSERT INTO department (department_name) VALUES (?)";
   connection.query(sql, response.createdDepartment, (err, result) => {
-    if (err) throw error;
-    console.log(result);
+    if (err) throw err;
+    console.log('[ADDED DEPARTMENT SUCCESSFULLY]');
+    startingMenu();
   });
 };
 
 const addRole = async () => {
   const response = await inquirer.prompt([
     {
+      type: "input",
       message: "What is the name of role you would like to create??",
       name: "createdRole",
     },
+    {
+      type: "input",
+      message: "What is the salary for this role?",
+      name: "createdSalary",
+    },
+    {
+      type: 'list',
+      message: 'Please choose the department the belongs to.',
+      name: 'connectDepartment',
+      choices: [
+        {
+          name: 'Accounting',
+          value: 1,
+        },
+        {
+          name: 'Engineering',
+          value: 2,
+        },
+        {
+          name: 'Development',
+          value: 3,
+        },
+        {
+          name: 'Admin',
+          value: 4,
+        },
+        {
+          name: 'Human Resources',
+          value: 5,
+        },
+      ]
+    },
   ]);
-  const sql = "INSERT INTO role (name) VALUES (?)";
-  connection.query(sql, response.createdRole, (err, result) => {
-    if (err) throw error;
-    console.log(result);
+  const sql = "INSERT INTO role (title, department_id, salary) VALUES (?, ?, ?)";
+   const vals = [response.createdRole, response.connectDepartment, response.createdSalary]
+  connection.query(sql, vals, (err, result) => {
+    if (err) throw err;
+    console.log('[ADDED ROLE SUCCESSFULLY]');
+    startingMenu();
+    
   });
 };
 

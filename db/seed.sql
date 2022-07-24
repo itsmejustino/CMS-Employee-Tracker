@@ -5,7 +5,7 @@ VALUES
     ("Engineering"),
     ("Development"),
     ("Admin"),
-    ("Human Resources");
+    ("HR");
 
 INSERT INTO
     role (title, department_id, salary)
