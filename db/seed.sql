@@ -8,7 +8,7 @@ VALUES
     ("Human Resources");
 
 INSERT INTO
-    current_role (title, department_id, salary)
+    role (title, department_id, salary)
 VALUES
     ("Accounting Director", 1, 1900000),
     ("Acocounting Lead", 1, 80000),
@@ -23,7 +23,7 @@ VALUES
     ("Quality Analyst", 4, 85000);
 
 INSERT INTO
-    employee (first_name, last_name, current_role_id, manager_id)
+    employee (first_name, last_name, role_id, manager_id)
 VALUES
     ("Josh", "Random", 1, 1),
     ("Sally", "Sue", 2, 1),

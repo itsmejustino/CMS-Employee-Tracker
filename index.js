@@ -56,7 +56,7 @@ function startingMenu() {
         getDepartments();
       }
       if (options == "viewRoles") {
-        getDepartments();
+        getRoles();
       }
       if (options == "viewEmployees") {
         getEmployees();
@@ -86,10 +86,12 @@ const getDepartments = async () => {
       message: "Viewing all departments",
       name: "viewingDepartments",
     },
-  ]);
+    
+  ]).then(console.log("(Press [ENTER] to view table)"));
+  
   const sql = "SELECT * FROM department";
   connection.query(sql, response.viewingDepartments, (err, result) => {
-    if (err) throw err;
+    if (err) throw error;
     console.table(result);
     startingMenu();
   });
@@ -101,11 +103,14 @@ const getEmployees = async () => {
       message: "Viewing all employees.",
       name: "viewingEmployees",
     },
-  ]);
+   
+  ]).then(console.log("(Press [ENTER] to view table)"));
+  console.log("(Press [ENTER] to view table)")
   const sql = "SELECT * FROM employee";
   connection.query(sql, response.viewingEmployees, (err, result) => {
-    if (err) console.error(err);
-    console.log(result);
+    if (err) throw error;
+    console.table(result);
+    startingMenu();
   });
 };
 
@@ -115,11 +120,16 @@ const getRoles = async () => {
       message: "Viewing all roles.",
       name: "viewingRoles",
     },
+   
   ]);
-  const sql = "SELECT * FROM current_role";
+  console.log("(Press [ENTER] to view table)")
+  const sql = "SELECT * FROM role";
   connection.query(sql, response.viewingRoles, (err, result) => {
-    if (err) console.error(err);
-    console.log(result);
+    if (err) throw error;
+    console.table(result);
+    startingMenu();
+    
+    
   });
 };
 
@@ -132,7 +142,7 @@ const addDepartment = async () => {
   ]);
   const sql = "INSERT INTO departments (name) VALUES (?)";
   connection.query(sql, response.createdDepartment, (err, result) => {
-    if (err) console.error(err);
+    if (err) throw error;
     console.log(result);
   });
 };
@@ -146,7 +156,7 @@ const addRole = async () => {
   ]);
   const sql = "INSERT INTO role (name) VALUES (?)";
   connection.query(sql, response.createdRole, (err, result) => {
-    if (err) console.error(err);
+    if (err) throw error;
     console.log(result);
   });
 };
@@ -160,7 +170,7 @@ const addEmployee = async () => {
   ]);
   const sql = "INSERT INTO role (name) VALUES (?)";
   connection.query(sql, response.createdEmployee, (err, result) => {
-    if (err) console.error(err);
+    if (err) throw error;
     console.log(result);
   });
 };
