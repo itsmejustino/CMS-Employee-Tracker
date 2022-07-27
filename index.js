@@ -152,46 +152,6 @@ const addDepartment = async () => {
   });
 };
 
-const departmentListNames = async () => {
-  const nameOfDepartments = await connection.promise()
-  .query("SELECT id, department_name FROM department");
-  // console.log("++++++++++++++++",nameOfDepartments[0], "+++++++++++++")
-  // return nameOfDepartments[0];
- 
-  // console.log(nameOfDepartments[0])
-
-   const mappedDepartmentNames = nameOfDepartments[0].map(({id, department_name}) => {
-    return {
-     name: department_name,
-     value: id,
-    }
-  
-  });
- console.log(mappedDepartmentNames)
-return mappedDepartmentNames;
-};
-
-// const departmentListIds = async () => {
-//   const nameOfDepartments = await connection.promise()
-//   .query("SELECT id, department_name FROM department");
-//   // console.log("++++++++++++++++",nameOfDepartments[0], "+++++++++++++")
-//   // return nameOfDepartments[0];
- 
-//   const mappedDepartmentName = nameOfDepartments[0].map(() => {
-//    let item = {
-//      department_name
-//     }
-   
-//   });
-
-
-//   console.log("++++++++++++++++",item,"++++++++++++++++");
-//   // console.log("++++++++++++++++",mappedDepartments, "++++++++++++")
-// return mappedDepartmentName;
-// };
-
-
-
 const addRole = async () => {
  const response = await inquirer.prompt([
     {
@@ -205,12 +165,9 @@ const addRole = async () => {
       name: "createdSalary",
     },
     {
-      type: "list",
-      message: "Please choose the department the belongs to.",
+      type: "input",
+      message: "Please select the department this belongs to. [Must enter a number]",
       name: "connectDepartment",
-      choices: departmentListNames(),
-    
-  
     },
   ]);
 
@@ -221,13 +178,14 @@ const addRole = async () => {
     response.connectDepartment,
     response.createdSalary,
   ];
-
-  await connection.promise().query(sql, vals, (err, result) => {
+  connection.query(sql, vals, (err, result) => {
     if (err) throw err;
     console.table(result);
     console.log("[ADDED ROLE SUCCESSFULLY]");
     startingMenu();
   });
+  
+  
 };
 
 const addEmployee = async () => {
@@ -242,64 +200,25 @@ const addEmployee = async () => {
     },
 
     {
-      type: "list",
-      message: "Please choose the department the belongs to.",
-      name: "connectDepartment",
-      choices: [
-        {
-          name: "Accounting",
-          value: 1,
-        },
-        {
-          name: "Engineering",
-          value: 2,
-        },
-        {
-          name: "Development",
-          value: 3,
-        },
-        {
-          name: "Admin",
-          value: 4,
-        },
-        {
-          name: "Human Resources",
-          value: 5,
-        },
-
-        {
-          type: "list",
-          message:
-            "Please choose the role that the employee will be assigned to.",
-          name: "connectDepartment",
-          choices: [
-            {
-              name: "Accounting",
-              value: 1,
-            },
-            {
-              name: "Engineering",
-              value: 2,
-            },
-            {
-              name: "Development",
-              value: 3,
-            },
-            {
-              name: "Admin",
-              value: 4,
-            },
-            {
-              name: "Human Resources",
-              value: 5,
-            },
-          ],
-        },
-      ],
+      type: "input",
+      message: "Please give the role this employee the belongs to. [Provide Role Id]",
+      name: "connectRole",
+    },
+    {
+      type: "input",
+      message: "Please choose the department manager of this employee. [Provide Manager Id]",
+      name: "connectManager",
     },
   ]);
-  const sql = "INSERT INTO role (name) VALUES (?)";
-  connection.query(sql, response.createdEmployee, (err, result) => {
+  const sql =
+  "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
+const vals = [
+  response.employeeFname,
+  response.employeeLname,
+  response.connectRole,
+  response.connectManager,
+];
+  connection.query(sql, vals, (err, result) => {
     if (err) throw error;
     console.log(result);
   });
@@ -308,10 +227,12 @@ const addEmployee = async () => {
 // const editEmployee = async () => {
 //   const response = await inquirer.prompt([
 //     {
-//       message: "What is the name of role you would like to create??",
+//       message: "What is the employee you want to edit??",
 //       name: "updatedEmployee",
 //     },
 //   ]);
+
+
 //   const sql = "INSERT INTO role (name) VALUES (?)";
 //   connection.query(sql, response.updatedEmployee, (err, result) => {
 //     if (err) console.error(err);
