@@ -1,8 +1,6 @@
 const connection = require("./config/connection");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
-const { query, promise } = require("./config/connection");
-const e = require("express");
 
 connection.connect((error) => {
   if (error) throw error;
@@ -81,18 +79,17 @@ function startingMenu() {
     });
 }
 
-const getDepartments = async () => {
-  const response = await inquirer
-    .prompt([
-      {
-        message: "Viewing all departments",
-        name: "viewingDepartments",
-      },
-    ])
-    .then(console.log("(Press [ENTER] to view table)"));
+// const getDptNoMenu = async () => {
+//   const sql = "SELECT * FROM department";
+//   connection.query(sql, (err, result) => {
+//     if (err) throw err;
+//     console.table(result);
+//   });
+// };
 
+const getDepartments = async () => {
   const sql = "SELECT * FROM department";
-  connection.query(sql, response.viewingDepartments, (err, result) => {
+  connection.query(sql, (err, result) => {
     if (err) throw err;
     console.table(result);
     startingMenu();
@@ -100,18 +97,9 @@ const getDepartments = async () => {
 };
 
 const getEmployees = async () => {
-  const response = await inquirer
-    .prompt([
-      {
-        message: "Viewing all employees.",
-        name: "viewingEmployees",
-      },
-    ])
-    .then(console.log("(Press [ENTER] to view table)"));
-
   console.log("(Press [ENTER] to view table)");
   const sql = "SELECT * FROM employee";
-  connection.query(sql, response.viewingEmployees, (err, result) => {
+  connection.query(sql, (err, result) => {
     if (err) throw err;
     console.table(result);
     startingMenu();
@@ -119,16 +107,8 @@ const getEmployees = async () => {
 };
 
 const getRoles = async () => {
-  const response = await inquirer
-    .prompt([
-      {
-        message: "Viewing all roles.",
-        name: "viewingRoles",
-      },
-    ]).then(console.log("(Press [ENTER] to view table)"));
-
   const sql = "SELECT * FROM role";
-  connection.query(sql, response.viewingRoles, (err, result) => {
+  connection.query(sql, (err, result) => {
     if (err) throw err;
     console.table(result);
     startingMenu();
@@ -148,12 +128,22 @@ const addDepartment = async () => {
   connection.query(sql, response.createdDepartment, (err, result) => {
     if (err) throw err;
     console.log("[ADDED DEPARTMENT SUCCESSFULLY]");
+    console.log("\n");
     startingMenu();
+    console.log("\n");
   });
 };
 
+// const getRoleNoMenu = async () => {
+//   const sql = "SELECT * FROM role";
+//   connection.query(sql, (err, result) => {
+//     if (err) throw err;
+//     console.table(result);
+//   });
+// };
+
 const addRole = async () => {
- const response = await inquirer.prompt([
+  const response = await inquirer.prompt([
     {
       type: "input",
       message: "What is the name of role you would like to create??",
@@ -166,7 +156,8 @@ const addRole = async () => {
     },
     {
       type: "input",
-      message: "Please select the department this belongs to. [Must enter a number]",
+      message:
+        "Please select the department this belongs to. [Must enter a number]",
       name: "connectDepartment",
     },
   ]);
@@ -178,14 +169,13 @@ const addRole = async () => {
     response.connectDepartment,
     response.createdSalary,
   ];
+  console.log("\n");
   connection.query(sql, vals, (err, result) => {
     if (err) throw err;
-    console.table(result);
+    console.table(getRoleNoMenu());
     console.log("[ADDED ROLE SUCCESSFULLY]");
     startingMenu();
   });
-  
-  
 };
 
 const addEmployee = async () => {
@@ -201,41 +191,80 @@ const addEmployee = async () => {
 
     {
       type: "input",
-      message: "Please give the role this employee the belongs to. [Provide Role Id]",
+      message:
+        "Please give the role this employee the belongs to. [Provide Role Id]",
       name: "connectRole",
     },
     {
       type: "input",
-      message: "Please choose the department manager of this employee. [Provide Manager Id]",
+      message:
+        "Please choose the department manager of this employee. [Provide Manager Id]",
       name: "connectManager",
     },
   ]);
   const sql =
-  "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
-const vals = [
-  response.employeeFname,
-  response.employeeLname,
-  response.connectRole,
-  response.connectManager,
-];
+    "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
+  const vals = [
+    response.employeeFname,
+    response.employeeLname,
+    response.connectRole,
+    response.connectManager,
+  ];
   connection.query(sql, vals, (err, result) => {
     if (err) throw error;
     console.log(result);
+    console.log("[ADDED EMPLOYEE SUCCESSFULLY]");
+    getEmployees();
+    startingMenu();
   });
 };
 
-// const editEmployee = async () => {
+const editEmployee = async () => {
+  const response = await inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the employee you want to edit??[Provide Employee Id]",
+      name: "updatedEmployee",
+    },
+    {
+      type: "input",
+      message: "What role will the employee be re-assigned?? [Provide Role Id]",
+      name: "updatedRole",
+    },
+  ]);
+
+  const sql = "UPDATE employee SET role_id = ? WHERE id = ?";
+  const vals = [response.updatedEmployee, response.updatedRole];
+  connection.query(sql, vals, (err, result) => {
+    if (err) console.error(err);
+    console.table(result);
+    console.log("[UPDATED EMPLOYEE SUCCESSFULLY]");
+    getEmployees();
+    startingMenu();
+  });
+};
+
+// const deleteEmployee = async () => {
 //   const response = await inquirer.prompt([
 //     {
-//       message: "What is the employee you want to edit??",
+//       type: "input",
+//       message: "What is the employee you want to edit??[Provide Employee Id]",
 //       name: "updatedEmployee",
+//     },
+//     {
+//       type: "input",
+//       message: "What role will the employee be re-assigned?? [Provide Role Id]",
+//       name: "updatedRole",
 //     },
 //   ]);
 
-
-//   const sql = "INSERT INTO role (name) VALUES (?)";
-//   connection.query(sql, response.updatedEmployee, (err, result) => {
+//   const sql = "DELETE employee SET role_id = ? WHERE id = ?";
+//   const vals = [response.updatedEmployee, response.updatedRole];
+//   connection.query(sql, vals, (err, result) => {
 //     if (err) console.error(err);
 //     console.log(result);
+//     console.log("[UPDATED EMPLOYEE SUCCESSFULLY]");
+//     startingMenu();
 //   });
-// };
+
+// }
