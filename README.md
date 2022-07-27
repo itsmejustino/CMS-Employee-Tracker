@@ -16,7 +16,7 @@
 ## Install-Instructions 
   npm i 
 ## Usage-Info
-  After installing dependencies invoke the program by typing 'node index.js'. Answer prompts for each team member added in the terminal.
+  After installing dependencies invoke the program by typing 'node index.js'. Select the prompts that are shown in the terminal in the terminal. Starting with viewing the departments, roles, and employees first will be easier to navigate through the menu when adding any of the above.
 ## Contribute
   If you would like to contribute please send a pull request.
 
