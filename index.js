@@ -88,7 +88,6 @@ function startingMenu() {
 // };
 
 const getDepartments = async () => {
-  const sql = "SELECT * FROM department";
   connection.query(sql, (err, result) => {
     if (err) throw err;
     console.table(result);
@@ -97,7 +96,6 @@ const getDepartments = async () => {
 };
 
 const getEmployees = async () => {
-  console.log("(Press [ENTER] to view table)");
   const sql = "SELECT * FROM employee";
   connection.query(sql, (err, result) => {
     if (err) throw err;
@@ -131,7 +129,6 @@ const addDepartment = async () => {
     console.log("[ADDED DEPARTMENT SUCCESSFULLY]");
     console.log("\n");
     console.table(getDepartments());
-   
   });
 };
 
@@ -177,7 +174,6 @@ const addRole = async () => {
     console.log("[ADDED ROLE SUCCESSFULLY]");
     console.log("\n");
     console.table(getRoles());
-   
   });
 };
 
@@ -218,8 +214,7 @@ const addEmployee = async () => {
     console.log("\n");
     console.log("[ADDED EMPLOYEE SUCCESSFULLY]");
     console.log("\n");
-   console.table(getEmployees());
-  
+    console.table(getEmployees());
   });
 };
 
@@ -238,14 +233,13 @@ const editEmployee = async () => {
   ]);
 
   const sql = "UPDATE employee SET role_id = ? WHERE id = ?";
-  const vals = [response.updatedEmployee, response.updatedRole];
+  const vals = [response.updatedRole, response.updatedEmployee];
   connection.query(sql, vals, (err, result) => {
     if (err) console.error(err);
     console.log("\n");
     console.log("[UPDATED EMPLOYEE SUCCESSFULLY]");
     console.log("\n");
     console.table(getEmployees());
-   
   });
 };
 
