@@ -30,10 +30,10 @@ VALUES
     ("Bob", "Ross", 3, 1),
     ("Rick", "Ross", 4, 4),
     ("Luke", "Skywalker", 5, 4),
-    ("Michael", "Ericson", 6, 4),
-    ("Ashton", "Mortison", 7, 7),
+    ("Antwon", "Ericson", 6, 4),
+    ("Ashton", "Morty", 7, 7),
     ("Sarah", "Henderson", 8, 7),
-    ("Jenny", "Hicks", 9, 7),
+    ("Jen", "Pickle", 9, 7),
     ("Paul", "Paulson", 10, 10),
     ("Bill", "William", 11, 10),
     ("Larry", "David", 11, 10);
