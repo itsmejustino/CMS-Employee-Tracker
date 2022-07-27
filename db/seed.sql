@@ -36,4 +36,4 @@ VALUES
     ("Jenny", "Hicks", 9, 7),
     ("Paul", "Paulson", 10, 10),
     ("Bill", "William", 11, 10),
-    ("Larry", "David", 12, 10);
+    ("Larry", "David", 11, 10);
