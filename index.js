@@ -127,10 +127,11 @@ const addDepartment = async () => {
   const sql = "INSERT INTO department (department_name) VALUES (?)";
   connection.query(sql, response.createdDepartment, (err, result) => {
     if (err) throw err;
+    console.log("\n");
     console.log("[ADDED DEPARTMENT SUCCESSFULLY]");
     console.log("\n");
-    startingMenu();
-    console.log("\n");
+    console.table(getDepartments());
+   
   });
 };
 
@@ -172,9 +173,11 @@ const addRole = async () => {
   console.log("\n");
   connection.query(sql, vals, (err, result) => {
     if (err) throw err;
-    console.table(getRoleNoMenu());
+    console.log("\n");
     console.log("[ADDED ROLE SUCCESSFULLY]");
-    startingMenu();
+    console.log("\n");
+    console.table(getRoles());
+   
   });
 };
 
@@ -212,10 +215,11 @@ const addEmployee = async () => {
   ];
   connection.query(sql, vals, (err, result) => {
     if (err) throw error;
-    console.log(result);
+    console.log("\n");
     console.log("[ADDED EMPLOYEE SUCCESSFULLY]");
-    getEmployees();
-    startingMenu();
+    console.log("\n");
+   console.table(getEmployees());
+  
   });
 };
 
@@ -237,10 +241,11 @@ const editEmployee = async () => {
   const vals = [response.updatedEmployee, response.updatedRole];
   connection.query(sql, vals, (err, result) => {
     if (err) console.error(err);
-    console.table(result);
+    console.log("\n");
     console.log("[UPDATED EMPLOYEE SUCCESSFULLY]");
-    getEmployees();
-    startingMenu();
+    console.log("\n");
+    console.table(getEmployees());
+   
   });
 };
 
