@@ -73,7 +73,7 @@ function startingMenu() {
         editEmployee();
       }
       if (options == "exit") {
-        console.log("exiting program");
+        console.log("Exiting Program. Goodbye!");
         process.exit();
       }
     });
