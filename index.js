@@ -88,6 +88,7 @@ function startingMenu() {
 // };
 
 const getDepartments = async () => {
+  const sql = "SELECT * FROM department";
   connection.query(sql, (err, result) => {
     if (err) throw err;
     console.table(result);
